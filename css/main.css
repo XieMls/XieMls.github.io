@@ -1822,7 +1822,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #53bbde;
+  background: #c2ff3d;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2676,7 +2676,7 @@ body {
   font-family: 'Zitiming' !important;
 }
 .site-meta {
-  background: $ #363636;
+  background: $Gray;
 }
 * {
   cursor: url("http://om8u46rmb.bkt.clouddn.com/sword2.ico"), auto !important;
