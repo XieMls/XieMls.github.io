@@ -1818,7 +1818,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ff04cf;
+  background: #ff71ff;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2662,6 +2662,7 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: center;
+  background-position: 50% 50%;
 }
 @font-face {
   font-family: Zitiming;
