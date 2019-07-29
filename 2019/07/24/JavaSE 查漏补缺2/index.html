@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="枚举和内部类枚举特征 枚举类默认继承了java.lang.Enum,而不是object类。 除了不能继承，基本上可以将enum 看做一个常规的类。 成员内部类 成员内部类可以无条件访问外部类的所有成员属性和成员方法（包括private成员和静态成员和方法）  可以使用成员内部类实现多继承，除了该外围类，其他类都不能访问。 成员内部类可以用private、protected、public、以及不写、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaSE 查漏补缺（二）">
+<meta property="og:url" content="http://yoursite.com/2019/07/24/JavaSE 查漏补缺2/index.html">
+<meta property="og:site_name" content="OneKing">
+<meta property="og:description" content="枚举和内部类枚举特征 枚举类默认继承了java.lang.Enum,而不是object类。 除了不能继承，基本上可以将enum 看做一个常规的类。 成员内部类 成员内部类可以无条件访问外部类的所有成员属性和成员方法（包括private成员和静态成员和方法）  可以使用成员内部类实现多继承，除了该外围类，其他类都不能访问。 成员内部类可以用private、protected、public、以及不写、">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-07-26T09:27:36.822Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaSE 查漏补缺（二）">
+<meta name="twitter:description" content="枚举和内部类枚举特征 枚举类默认继承了java.lang.Enum,而不是object类。 除了不能继承，基本上可以将enum 看做一个常规的类。 成员内部类 成员内部类可以无条件访问外部类的所有成员属性和成员方法（包括private成员和静态成员和方法）  可以使用成员内部类实现多继承，除了该外围类，其他类都不能访问。 成员内部类可以用private、protected、public、以及不写、">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/07/24/JavaSE 查漏补缺2/">
+
+
+
+
+
+  <title>JavaSE 查漏补缺（二） | OneKing</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">OneKing</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">进阶之路</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home  //首页"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags  //标签"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th   //分类"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/24/JavaSE 查漏补缺2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="OneKing">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/touxiang.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OneKing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JavaSE 查漏补缺（二）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-24T16:41:23+08:00">
+                2019-07-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="枚举和内部类"><a href="#枚举和内部类" class="headerlink" title="枚举和内部类"></a>枚举和内部类</h4><h5 id="枚举特征"><a href="#枚举特征" class="headerlink" title="枚举特征"></a>枚举特征</h5><ul>
+<li>枚举类默认继承了java.lang.Enum,而不是object类。</li>
+<li>除了不能继承，基本上可以将enum 看做一个常规的类。</li>
+<li><h5 id="成员内部类"><a href="#成员内部类" class="headerlink" title="成员内部类"></a>成员内部类</h5></li>
+<li>成员内部类可以无条件访问外部类的所有成员属性和成员方法（包括private成员和静态成员和方法） </li>
+<li>可以使用成员内部类实现多继承，除了该外围类，其他类都不能访问。</li>
+<li>成员内部类可以用private、protected、public、以及不写、来修饰类；而外部类自能被public、不写,修饰类。</li>
+<li>成员内部类中不能存在任何static的变量和方法。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">成员内部类的调用方式</span><br><span class="line">public class A&#123;</span><br><span class="line">	public class B&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line">public class Test&#123;</span><br><span class="line">	A.B b =new A().new B();</span><br><span class="line">	b.属性</span><br><span class="line">	b.方法</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h5 id="局部内部类"><a href="#局部内部类" class="headerlink" title="局部内部类"></a>局部内部类</h5><ul>
+<li>它和成员内部类的区别在于局部内部类的访问仅限于方法内或者该作用域内。 </li>
+<li>局部内部类就像是方法里面的一个局部变量一样，是不能有访问修饰符以及static修饰符的。</li>
+</ul>
+<h5 id="匿名内部类"><a href="#匿名内部类" class="headerlink" title="匿名内部类"></a>匿名内部类</h5><ul>
+<li>1.4.1 匿名内部类不能定义任何静态成员、方法。</li>
+<li>1.4.2 匿名内部类中的方法不能是抽象的。(因为抽象类要被实现，不要没意义)</li>
+<li>1.4.3 匿名内部类必须实现接口或抽象父类的所有抽象方法。</li>
+<li>1.4.4 匿名内部类不能定义构造器。</li>
+<li>1.4.5 匿名内部类访问的外部类成员变量或成员方法必须用static修饰。</li>
+<li>1.4.6 内部类可以访问外部类私有变量和方法。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">语法格式：</span><br><span class="line">new 实现接口（）</span><br><span class="line">&#123;</span><br><span class="line">    //匿名内部类类体部分</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------</span><br><span class="line">new 父类构造器（实参列表）</span><br><span class="line">&#123;</span><br><span class="line">  //匿名内部类类体部分</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h5 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h5><ul>
+<li>只不过在类的前面多了一个关键字static</li>
+<li>它不能使用外部类的非static成员变量或者方法</li>
+</ul>
+<h4 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h4><h5 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h5><ul>
+<li>Try是必须的，Catch是可选的，Finally也是可选的；但必须二选一，不能只写Try。</li>
+<li>程序无法通过语法规则来判断业务的问题，就可以通过throw来自己根据业务抛异常。</li>
+<li>运行时异常可捕捉，非运行时异常不可捕捉。</li>
+</ul>
+<h5 id="自定义异常"><a href="#自定义异常" class="headerlink" title="自定义异常"></a>自定义异常</h5><ul>
+<li>通过继承Exception来定义自己的异常类型;（构造器不能继承过来,他会自动帮你写一个无参的构造器） </li>
+</ul>
+<h4 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h4><h5 id="注意点-1"><a href="#注意点-1" class="headerlink" title="注意点"></a>注意点</h5><ul>
+<li>集合和数组中存放的都是对象的引用。</li>
+<li>Collection是集合类的接口，Collections是集合的工具类。</li>
+<li>List 有序，可重复；Set 无序（无法判断他的插入后的顺序），不可重复；Map是以键值对存储的（也叫双集合存储，key集合通过指向找到value集合）。</li>
+<li>在对集合进行迭代过程中，不允许出现迭代器以外的对元素的操作，因为这样会产生安全隐患，java会抛出异常并发修改异常（ConcurrentModificationException），普通迭代器只支持在迭代过程中的删除动作。</li>
+</ul>
+<h5 id="List"><a href="#List" class="headerlink" title="List"></a>List</h5><ul>
+<li>ArrayList 查找速度快，插入操作慢(数组结构)。</li>
+<li>LinkedList 插入速度较快，查询慢（双向链表结构）。</li>
+<li>Vector: 描述的是一个线程安全的ArrayList。</li>
+<li>List专属的迭代器listIterator();逆向迭代。</li>
+</ul>
+<h5 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h5><ul>
+<li><p>3.3.1 HashSet</p>
+<blockquote>
+<ul>
+<li>HashSet不存入重复元素的规则.他会自动使用hashcode和equals进行比较。</li>
+<li>当存对象时一般地址都不一样，这时要判断他的值是否相同时就需要自己在对象类中重写hashcode和equals方法来判断是否相同（业务中常用）。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>3.3.2 TreeSet</p>
+<blockquote>
+<ul>
+<li>TreeSet用的是红黑树算法：左小右大。</li>
+<li>存入的数据或对象一定要有排序规则，否则无法存入。</li>
+<li>TreeSet集合排序的两种方式：（当Comparable比较方式和Comparator比较方式同时存在时，以Comparator的比较方式为主；）    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">1 让元素自身具备比较性：元素需要实现Comparable接口，重写compareTo 方法。（String自身已重写了compareTo）</span><br><span class="line">	public class Dog implements Comparable&lt;Dog&gt; &#123;	</span><br><span class="line">	private String name;</span><br><span class="line">	private int age;</span><br><span class="line">	//省略set、get</span><br><span class="line">	@Override</span><br><span class="line">	public int compareTo(Dog o) &#123;</span><br><span class="line">		if(o.age&gt;this.age) &#123;</span><br><span class="line">			return 1;</span><br><span class="line">		&#125;</span><br><span class="line">		if(o.age&lt;this.age) &#123;</span><br><span class="line">			return -1;</span><br><span class="line">		&#125;</span><br><span class="line">		return this.name.compareTo(o.name);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">2 让容器自身具备比较性，自定义比较器：定义一个类实现Comparator 接口，覆盖compare方法。</span><br><span class="line">	class DogComparator implements Comparator &#123;</span><br><span class="line">		public int compare(Object o1, Object o2) &#123;</span><br><span class="line">			Dog b1 = (Dog ) o1;</span><br><span class="line">			Dog b2 = (Dog ) o2;</span><br><span class="line">			System.out.println(b1+&quot; comparator &quot;+b2);</span><br><span class="line">			if (b1.getAge() &gt; b2.getAge()) &#123;</span><br><span class="line">				return 1;</span><br><span class="line">			&#125;</span><br><span class="line">			if (b1.getAge() &lt; b2.getAge()) &#123;</span><br><span class="line">				return -1;</span><br><span class="line">			&#125;</span><br><span class="line">			return b1.getName().compareTo(b2.getName());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		TreeSet ts = new TreeSet(new DogComparator());	</span><br><span class="line">		ts.dog(new Dog(&quot;拉拉非&quot;, 10))</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+</li>
+<li><p>3.3.2 LinkedHashSet</p>
+<blockquote>
+<ul>
+<li>他会保存插入的顺序。 </li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h5 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h5><ul>
+<li><p>注意点：</p>
+<blockquote>
+<ul>
+<li>Map集合没有直接取出元素的方法，而是先转成Set集合，在通过迭代获取元素 。</li>
+<li>V put(K key, V value)：可以相同的key值，但是添加的value值会覆<br>盖前面的，返回值是前一个的value，如果没有就返回null）。</li>
+<li>Map的key是同过Set<k>存储，value是通过Collection<v>存储。</v></k></li>
+<li>Map三种遍历方式<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1 Set&lt; K &gt; keySet(): 返回所有的key对象的Set集合再通过get方法获取键对应的值。</span><br><span class="line">	Set&lt;Integer&gt; ks = map.keySet();</span><br><span class="line">2 Collection&lt; V &gt; values():不能获取到key对象。</span><br><span class="line">	Collection&lt;String&gt; vs = map.values();</span><br><span class="line">3 (重点掌握)Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet():通过Map中的entrySet()方法获取存放Map.Entry&lt;K,V&gt;对象的Set集合。</span><br><span class="line">	Set&lt;Entry&lt;Person, String&gt;&gt; entrySet = map.entrySet();</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+</li>
+<li><p>HashMap：</p>
+<blockquote>
+<ul>
+<li>底层是哈希表数据结构，线程是不同步的，可以存入null键，null值（因为key相同，所以无论存多少次null都会只有一个，value会覆盖旧的）。</li>
+<li>一般都会重写hashcode和equals方法。因为equals只判断存储的内存地址是否相同，业务上一般要判断对象的值是否相同。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>TreeMap：</p>
+<blockquote>
+<ul>
+<li>和上面的TreeSet基本一致，不过TreeMap是要Key值要有比较性，实现和上面一致；</li>
+</ul>
+</blockquote>
+</li>
+<li><p>LinkedHashMap</p>
+<blockquote>
+<ul>
+<li>有序的HashMap存储方式（即可以按照插入顺序存储）</li>
+</ul>
+</blockquote>
+</li>
+<li><p>HashTable</p>
+<blockquote>
+<ul>
+<li>线程安全 </li>
+</ul>
+</blockquote>
+<h4 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h4></li>
+<li><p>泛型的特点：</p>
+<blockquote>
+<ul>
+<li>将运行时的异常提前至编译时发生。</li>
+<li>获取元素的时候无需强转类型，避免类型转换的异常问题。</li>
+<li>操作的引用数据类型不确定的时候,就可以使用泛型类。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>泛型类</p>
+<blockquote>
+<ul>
+<li>修饰符 class 类名&lt;泛型&gt;{};如 public class xie&lt;K,T&gt;{};</li>
+<li>可以定义一个或多个泛型类型，当调用他时必须赋给他类型；如 public class xie&lt;String,int&gt;{};</li>
+<li>子类继承他时，要么赋给他类型，要么和父类的泛型类型一致。 </li>
+<li>接口也一样。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>泛型方法</p>
+<blockquote>
+<ul>
+<li>Public &lt; T &gt; T fun(T t) {}</li>
+</ul>
+</blockquote>
+</li>
+<li><p>泛型通配符</p>
+<blockquote>
+<ul>
+<li>List&lt; ? &gt;：表示只能存List的子类或本类的数据，不能存父类和其他类的数据。</li>
+<li>可以对类型进行限定范围。</li>
+<li>？extends E: 接收E类型或者E的子类型。</li>
+<li>？super E: 接收E类型或者E的父类型。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/22/JavaSE 查漏补缺1/" rel="next" title="JavaSE 查漏补缺(一)">
+                <i class="fa fa-chevron-left"></i> JavaSE 查漏补缺(一)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/touxiang.jpg" alt="OneKing">
+            
+              <p class="site-author-name" itemprop="name">OneKing</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#枚举和内部类"><span class="nav-number">1.</span> <span class="nav-text">枚举和内部类</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#枚举特征"><span class="nav-number">1.1.</span> <span class="nav-text">枚举特征</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#成员内部类"><span class="nav-number">1.2.</span> <span class="nav-text">成员内部类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#局部内部类"><span class="nav-number">1.3.</span> <span class="nav-text">局部内部类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#匿名内部类"><span class="nav-number">1.4.</span> <span class="nav-text">匿名内部类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#静态内部类"><span class="nav-number">1.5.</span> <span class="nav-text">静态内部类</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#异常"><span class="nav-number">2.</span> <span class="nav-text">异常</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#注意点"><span class="nav-number">2.1.</span> <span class="nav-text">注意点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#自定义异常"><span class="nav-number">2.2.</span> <span class="nav-text">自定义异常</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集合"><span class="nav-number">3.</span> <span class="nav-text">集合</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#注意点-1"><span class="nav-number">3.1.</span> <span class="nav-text">注意点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#List"><span class="nav-number">3.2.</span> <span class="nav-text">List</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Set"><span class="nav-number">3.3.</span> <span class="nav-text">Set</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Map"><span class="nav-number">3.4.</span> <span class="nav-text">Map</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#泛型"><span class="nav-number">4.</span> <span class="nav-text">泛型</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">OneKing</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共4.1k字</span>
+</div>
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/click.js"></script>
+</body>
+</html>

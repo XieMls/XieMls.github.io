@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="基本数据类型 1.1 Float和long比较由于存储结构不同，float比long表示的范围大。 1.2 基本数据类型在计算的时候， 数值常量默认是int，小数常量默认是double。  byte, short , int, char, 四种类型只要是发生计算都会自动的把结果提升成int类型 int long float, double 不同的类型来计算的时候没有类型的会向大的表数范围提升 整数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaSE 查漏补缺(一)">
+<meta property="og:url" content="http://yoursite.com/2019/07/22/JavaSE 查漏补缺1/index.html">
+<meta property="og:site_name" content="OneKing">
+<meta property="og:description" content="基本数据类型 1.1 Float和long比较由于存储结构不同，float比long表示的范围大。 1.2 基本数据类型在计算的时候， 数值常量默认是int，小数常量默认是double。  byte, short , int, char, 四种类型只要是发生计算都会自动的把结果提升成int类型 int long float, double 不同的类型来计算的时候没有类型的会向大的表数范围提升 整数">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-07-22T09:23:51.178Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaSE 查漏补缺(一)">
+<meta name="twitter:description" content="基本数据类型 1.1 Float和long比较由于存储结构不同，float比long表示的范围大。 1.2 基本数据类型在计算的时候， 数值常量默认是int，小数常量默认是double。  byte, short , int, char, 四种类型只要是发生计算都会自动的把结果提升成int类型 int long float, double 不同的类型来计算的时候没有类型的会向大的表数范围提升 整数">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/07/22/JavaSE 查漏补缺1/">
+
+
+
+
+
+  <title>JavaSE 查漏补缺(一) | OneKing</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">OneKing</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">进阶之路</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home  //首页"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags  //标签"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th   //分类"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/22/JavaSE 查漏补缺1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="OneKing">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/touxiang.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OneKing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JavaSE 查漏补缺(一)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-22T09:18:08+08:00">
+                2019-07-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h4><ul>
+<li>1.1 Float和long比较由于存储结构不同，float比long表示的范围大。</li>
+<li>1.2 基本数据类型在计算的时候， 数值常量默认是int，小数常量默认是double。<blockquote>
+<ul>
+<li>byte, short , int, char, 四种类型只要是发生计算都会自动的把结果提升成int类型</li>
+<li>int long float, double 不同的类型来计算的时候没有类型的会向大的表数范围提升</li>
+<li>整数类型（byte, short, int, long）的默认值都是    0</li>
+<li>小数(float, double)的默认值都是                    0.0</li>
+<li>布尔数据类型(boolean)的默认值是                false</li>
+<li>字符数据类型(char)的默认值是                     ‘ ’</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h4 id="判断和循环语句"><a href="#判断和循环语句" class="headerlink" title="判断和循环语句"></a>判断和循环语句</h4><ul>
+<li>2.1 多重if当遇到第一个满足的表达式条件时执行当前的if语句，就不会再向下去执行，也就是说下一个是上一个的else下。</li>
+<li>2.2 swtich的表达式只能是byte, short, char, int, String。</li>
+</ul>
+<h4 id="方法和数组"><a href="#方法和数组" class="headerlink" title="方法和数组"></a>方法和数组</h4><ul>
+<li>3.1 如果方法的返回值是void，那么return;是代表程序的终止，如果方法要是有返回值那么就不能有return;</li>
+<li>3.2 基本数据类型的变量都存储在栈中，栈的特点是存储空间小，但是存取速度快，先进后出。</li>
+<li>3.3 引用数据类型所占的空间比较大，存储在堆中，堆的特点，空间大，存取的速度比较慢。  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">冒泡排序升序</span><br><span class="line">int[] arr = &#123;8,4,7,15,9,3&#125;;</span><br><span class="line">for(int i = 0; i &lt; arr.length-1; i++)&#123;</span><br><span class="line">	for(int j = 0; j &lt; arr.length-1-i; j++)&#123;</span><br><span class="line">		if(arr[j] &gt; arr[j+1])&#123;</span><br><span class="line">			int tem = arr[j];</span><br><span class="line">			arr[j] = arr[j+1];</span><br><span class="line">			arr[j+1] = tem;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;		</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h4><ul>
+<li><p>4.1 引用类型</p>
+<blockquote>
+<p>数组、类、接口； 默认值：“null”。</p>
+</blockquote>
+</li>
+<li><p>4.2 对象的数据结构</p>
+<blockquote>
+<ul>
+<li>每一个类class加载到数据共享区中，jvm会解析这个类的内容，方法是每个对象共享,但是方法内的属性的是哪个对象调用这个方法，那么这个属性就是在那个对象的。</li>
+<li>对象存储在堆中，引用存储在栈中，堆中的每一个对象的数据是隔离的。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>4.3 局部变量</p>
+<blockquote>
+<ul>
+<li>作用范围：只限于所定义的大括号，以及这个大括号的子括号内有效。</li>
+<li>存储的位置：存储在栈内存中。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>4.4 this关键字</p>
+<blockquote>
+<ul>
+<li>this只能在对象方法内使用</li>
+<li>this就是调用这个方法的那个对象的引用</li>
+<li>对于类的对象来说，属性是每个对象都有一份是数据隔离的。但是方法是多个对象共享，不同的对象调用这个方法的时候用this来区分不同对象的数据。this是可以隐藏。</li>
+<li>构造器之间的调用：1.this(…)必须放在构造器的第一行 2.在构造器中调用其他构造器不创建对象，只初始化</li>
+</ul>
+</blockquote>
+</li>
+<li><p>4.5 static（也叫类方法和类属性）</p>
+<blockquote>
+<ul>
+<li>类方法的当前的class文件加载进入jvm类方法就被初始化, jvm执行完毕Student.class文件出了jvm，类型方法也就消失了。</li>
+<li>对象方法和类方法都是被对象共享。 类方法初始化很早jvm加载这个类的时候这个方法就初始化了.对象方法也是早早的就进入jvm了，但是不一定被启用了，只有先创建了对象，才有可能使用这个方法。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>4.6 静态代码块</p>
+<blockquote>
+<ul>
+<li>静态代码块主要是用于初始化资源。</li>
+<li>静态代码块在main之前执行。</li>
+<li>静态代码块可以范围类属性（必须先定义）和类方法</li>
+</ul>
+</blockquote>
+<h4 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h4></li>
+<li><p>5.1 继承的数据结构</p>
+<blockquote>
+<ul>
+<li>在类的继承结构中，如果创建一个子类的对象，那么在子类的对象的内部创建一个父类的对象，如果通过子类的对象访问属性的时候，子类中没有，就会到父类的对象中查找，如果调用方法的时候也是一样的，如果子类中没有，也会到父类中查找。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>5.2 super关键字</p>
+<blockquote>
+<ul>
+<li>如果父类带有有参数的构造器，并且没有显式的定义父类的默认构造器，默认构造器被覆盖，导致子类的构造器无法通过super()来做调用，就会编译报错，需要显式的定义父类的默认的构造器。</li>
+<li>如果子类的构造器中调用了父类中的有参数的构造器，默认super()的调用就不会有了。不能在子类的构造器中调用两个super(…)</li>
+<li>super可以表示父类的引用，我们可以使用super和this来区分父类和子类中同名的属性。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>5.3 重写和重载</p>
+<blockquote>
+<ul>
+<li>重写的目的：般是父类的该方法满足不了子类的需求所以才发生重写。</li>
+<li>重载的目的：节省类中的命名资源和提高代码的可读性。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>5.4 抽象类</p>
+<blockquote>
+<ul>
+<li>理解：当多个具体的实体类存在着共同的行为，但是有不同的表现，我们在父类继承过程中父类的方法具体实现不确定，但是能确定的是他们都有这种行为。<br>我们要把这种行为方法作为抽象方法。<br>注意：抽象类中可以没有抽象方法，但是有抽象方法的类一定是抽象类</li>
+<li>特点：抽象类不能被实例化。只能被继承，然后实例化子类。</li>
+<li>抽象类的抽象方法不能和private，final， static共存(违背了抽象类的初衷)</li>
+</ul>
+</blockquote>
+<h4 id="接口和多态"><a href="#接口和多态" class="headerlink" title="接口和多态"></a>接口和多态</h4></li>
+<li><p>6.1 接口</p>
+<blockquote>
+<ul>
+<li>在接口中可以定义”属性”(其实是常量)，可以通过接口的实现类的实例来访问（不推荐），推荐使用接口名.常量，这是一个常量默认是public, static ,final</li>
+<li>接口在jdk1.8后：①可以定义静态方法并实现；②可以定义默认(用default关键字)方法并实现；</li>
+</ul>
+</blockquote>
+</li>
+<li><p>6.2 接口和抽象类区别</p>
+<blockquote>
+<ul>
+<li>1.接口是行为的抽象可以有静态方法，抽象方法和默认方法，抽象类中可以有所有方法。</li>
+<li>2.接口和抽象类都不能实例化，接口需要类来实现后实例化实现类，抽象类需要类来继承然后实例化子类。</li>
+<li>3.抽象类只能单继承，接口可以多继承接口（jdk1.7），接口还可以多实现。</li>
+<li>4.接口中的“属性”是public static final类型的，抽象类中的属性跟普通类中的属性没有区别。</li>
+<li>5.接口中的方法默认就是抽象的不需要加absract，抽象类中的抽象方法需要加abstract关键字。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>6.3 父子类之间的转换</p>
+<blockquote>
+<ul>
+<li>如果子类对父类的方法有覆写，并且子类的实例赋值给父类的引用，通过这个引用（jt）来调用这个覆写的方法的时候，调用的是子类。 </li>
+<li>当字类转换成父类的时候，引用将不在能调用子类的属性。</li>
+<li>如果父子类有同名的属性，那么父类指向子类的实例的引用调用这个属性的时候调用的还是父类的，不要和方法混淆。</li>
+<li>当父类转回子类的时候，这时调用的方法和属性都是子类的（子类没有就找父类的）<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Class Teache&#123;&#125;</span><br><span class="line">Class Teache extends JavaTeacher&#123;&#125;</span><br><span class="line">//子类自动转换成父类(向上转型)</span><br><span class="line">Teacher jt = new JavaTeacher();</span><br><span class="line"></span><br><span class="line">//父类转换成子类（前提是父类的真身是这个子类，向下转型）</span><br><span class="line">Teacher jt = new JavaTeacher();</span><br><span class="line">JavaTeacher t = (JavaTeacher)jt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+</li>
+<li><p>6.4 多态的条件</p>
+<blockquote>
+<ul>
+<li>1.子类对父类有方法重写 </li>
+<li>2.父类的引用指向子类的实例，调用覆写的这个方法的时候，调用是子类的方法。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/30/idea注册码/" rel="next" title="IDEA注册码">
+                <i class="fa fa-chevron-left"></i> IDEA注册码
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/24/JavaSE 查漏补缺2/" rel="prev" title="JavaSE 查漏补缺（二）">
+                JavaSE 查漏补缺（二） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/touxiang.jpg" alt="OneKing">
+            
+              <p class="site-author-name" itemprop="name">OneKing</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本数据类型"><span class="nav-number">1.</span> <span class="nav-text">基本数据类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#判断和循环语句"><span class="nav-number">2.</span> <span class="nav-text">判断和循环语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法和数组"><span class="nav-number">3.</span> <span class="nav-text">方法和数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#面向对象"><span class="nav-number">4.</span> <span class="nav-text">面向对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#继承"><span class="nav-number">5.</span> <span class="nav-text">继承</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#接口和多态"><span class="nav-number">6.</span> <span class="nav-text">接口和多态</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">OneKing</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共4.1k字</span>
+</div>
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/click.js"></script>
+</body>
+</html>
