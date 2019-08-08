@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="IO流File类 1.1.1 常用的方法和属性  1234567891011public static void main(String[] args) &amp;#123;	//创建文件（夹）操作对象，可以是不存在文件或文件夹，但不会创建文件（夹）	//File.separatorChar表示分隔符（主要让代码可以在windows和Linux切换）	File file = new File(&amp;quot;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaSE 查漏补缺（三）">
+<meta property="og:url" content="http://yoursite.com/2019/07/30/JavaSE 查漏补缺3/index.html">
+<meta property="og:site_name" content="OneKing">
+<meta property="og:description" content="IO流File类 1.1.1 常用的方法和属性  1234567891011public static void main(String[] args) &amp;#123;	//创建文件（夹）操作对象，可以是不存在文件或文件夹，但不会创建文件（夹）	//File.separatorChar表示分隔符（主要让代码可以在windows和Linux切换）	File file = new File(&amp;quot;">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-08-08T08:51:41.245Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaSE 查漏补缺（三）">
+<meta name="twitter:description" content="IO流File类 1.1.1 常用的方法和属性  1234567891011public static void main(String[] args) &amp;#123;	//创建文件（夹）操作对象，可以是不存在文件或文件夹，但不会创建文件（夹）	//File.separatorChar表示分隔符（主要让代码可以在windows和Linux切换）	File file = new File(&amp;quot;">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/07/30/JavaSE 查漏补缺3/">
+
+
+
+
+
+  <title>JavaSE 查漏补缺（三） | OneKing</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">OneKing</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">进阶之路</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home  //首页"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags  //标签"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th   //分类"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/30/JavaSE 查漏补缺3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="OneKing">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/touxiang.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OneKing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JavaSE 查漏补缺（三）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-30T16:01:37+08:00">
+                2019-07-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="IO流"><a href="#IO流" class="headerlink" title="IO流"></a>IO流</h4><h5 id="File类"><a href="#File类" class="headerlink" title="File类"></a>File类</h5><ul>
+<li>1.1.1 常用的方法和属性  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">	//创建文件（夹）操作对象，可以是不存在文件或文件夹，但不会创建文件（夹）</span><br><span class="line">	//File.separatorChar表示分隔符（主要让代码可以在windows和Linux切换）</span><br><span class="line">	File file = new File(&quot;e:&quot;+File.separatorChar +&quot;test.txt&quot;);</span><br><span class="line">	//通过file对象检验是否存在指定的目录或者文件.</span><br><span class="line">	System.out.println(file.exists());</span><br><span class="line">	//通过file对象判断是否是目录</span><br><span class="line">	System.out.println(file.isDirectory());</span><br><span class="line">	//通过file对象判断是否是文件</span><br><span class="line">	System.out.println(file.isFile());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h5 id="字节流"><a href="#字节流" class="headerlink" title="字节流"></a>字节流</h5><ul>
+<li><p>1.2.1 FileInputStream</p>
+<blockquote>
+<ul>
+<li>InputStream是一个抽象类，意味着不能创建对象，那么需要找到具体的子类来使用。</li>
+<li>字节输入流，文件输入到java内存中就叫输入流；反之就是输出流。</li>
+<li>在FileInputStream（String，blood）中，将后面的blood值改成true就不会覆盖文件中的东西。</li>
+<li>他可以用：1.int read()方法实现输出。2.int read(byte[] b)方法实现。</li>
+</ul>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">FileInputStream fis = new FileInputStream(&quot;c:&quot;+File.separatorChar&quot;+&quot;test.txt&quot;);</span><br><span class="line">//第一种方式：是一个个字节的读取，len不是长度，是读取到的字节对应的码</span><br><span class="line">int len = -1;</span><br><span class="line">while ((len = fis.read()) != -1) &#123;</span><br><span class="line">	System.out.print((char) len);</span><br><span class="line">&#125;</span><br><span class="line">//第二种方式：通过byte数组来存储读取到的数据</span><br><span class="line">byte[] byt = new byte[1024];</span><br><span class="line">int len = 0;</span><br><span class="line">while ((len = fis.read(byt)) != -1) &#123;</span><br><span class="line">	System.out.println(new String(byt, 0, len));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>1.2.2 FileOutputStream</p>
+<blockquote>
+<ul>
+<li>1.write(int b)方法,一次写出一个字节。</li>
+<li>2.write(byte[] b) 将 b.length 个字节从指定的 byte 数组写入此输出流中。</li>
+<li>FileOutputStream指定的路径中的文件不存在是，它会自动创建，但不能创建多级目录。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h5 id="缓冲流"><a href="#缓冲流" class="headerlink" title="缓冲流"></a>缓冲流</h5><ul>
+<li>1.3.1BufferedInputStream和BufferedOutputStream<blockquote>
+<ul>
+<li>通过上面我们可以发现byte[]其实起到的是缓冲的效果。</li>
+<li>缓冲区大小，默认的字节是8192。</li>
+</ul>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">FileInputStream fis = new FileInputStream(srcPath);</span><br><span class="line">FileOutputStream fos = new FileOutputStream(destPath);</span><br><span class="line">// 使用缓冲流</span><br><span class="line">BufferedInputStream bis = new BufferedInputStream(fis);</span><br><span class="line">BufferedOutputStream bos = new BufferedOutputStream(fos);</span><br><span class="line">// 读取和写入信息</span><br><span class="line">int len = 0;</span><br><span class="line">while ((len = bis.read()) != -1) &#123;</span><br><span class="line">	bos.write(len);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h5 id="字符流"><a href="#字符流" class="headerlink" title="字符流"></a>字符流</h5><ul>
+<li>1.4.1 字符流的作用：<blockquote>
+<ul>
+<li>字节流一个个读取数据，当他读取中文时会出现乱码，因为中文占两个字节或以上。</li>
+</ul>
+</blockquote>
+</li>
+<li>1.4.2 FileReader和FileWriter <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Reader reader = new FileReader(path1);</span><br><span class="line">Writer writer = new FileWriter(path2);</span><br><span class="line">BufferedReader br = new BufferedReader(reader);</span><br><span class="line">BufferedWriter bw = new BufferedWriter(writer);</span><br><span class="line">int ch = -1;</span><br><span class="line">while ((ch = br.read()) != -1) &#123;</span><br><span class="line">		bw.write(ch);</span><br><span class="line">		bw.flush();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h5 id="序列流"><a href="#序列流" class="headerlink" title="序列流"></a>序列流</h5><ul>
+<li><p>1.5.1 多个流进行合并</p>
+<blockquote>
+<ul>
+<li>两个文件时：SequenceInputStream(InputStream s1, InputStream s2)</li>
+<li>多个文件时：</li>
+</ul>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">InputStream in1 = new FileInputStream(&quot;c:/a.txt&quot;);</span><br><span class="line">InputStream in2 = new FileInputStream(&quot;c:/b.txt&quot;);</span><br><span class="line">InputStream in3 = new FileInputStream(&quot;c:/c.txt&quot;);</span><br><span class="line">LinkedHashSet&lt;InputStream&gt; set = new LinkedHashSet&lt;InputStream&gt;();</span><br><span class="line">set.add(in1);</span><br><span class="line">set.add(in2);</span><br><span class="line">set.add(in3);</span><br><span class="line">//必须用迭代器</span><br><span class="line">final Iterator&lt;InputStream&gt; iter = set.iterator();</span><br><span class="line">SequenceInputStream sin = new SequenceInputStream(</span><br><span class="line">		new Enumeration&lt;InputStream&gt;() &#123;</span><br><span class="line">			@Override</span><br><span class="line">			public boolean hasMoreElements() &#123;</span><br><span class="line">				return iter.hasNext();</span><br><span class="line">			&#125;</span><br><span class="line">			@Override</span><br><span class="line">			public InputStream nextElement() &#123;</span><br><span class="line">				return iter.next();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line">FileOutputStream out = new FileOutputStream(&quot;c:/z.txt&quot;);</span><br><span class="line">for (int b = -1; (b = sin.read()) != -1;) &#123;</span><br><span class="line">	out.write(b);</span><br><span class="line">&#125;</span><br><span class="line">不懂就自己找笔记</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>1.5.2 对象的序列化</p>
+<blockquote>
+<ul>
+<li>1.对象要先实现Serializable接口。</li>
+<li>2.如果对象中有其他属性对象，那么那个属性对象也要实现Serializable接口，要么就用transient关键字修饰，声明后序列后时可以忽略当前的属性。反序列化时取出null。</li>
+<li>3.给类中定义一个serialVersionUID，如果不定义的话，当你序列化后，然后你改了你序列化的类后，反序列化就会报错；如果定义了，当你序列化后，然后你改了你序列化的类后，反序列化时会返回你序列化时的数据；这样就保证了一致性。</li>
+<li>利用ObjectOutputStream与bjectInputStream进行序列化和反序列化。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h4 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h4><h5 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h5><ul>
+<li>2.1.1 区别<blockquote>
+<ul>
+<li>进程：正在运行的程序，负责了这个程序的内存空间分配，代表了内存中的执行区域。</li>
+<li>线程：就是在一个进程中负责一个执行路径。</li>
+<li>多线程：就是在一个进程中多个执行路径同时执行。</li>
+</ul>
+</blockquote>
+</li>
+<li>2.1.2 线程<blockquote>
+<ul>
+<li>线程在堆和方法区中是共享的，在虚拟机栈、本地方法栈、程序计数器中线程是私有的。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h5 id="多线程创建"><a href="#多线程创建" class="headerlink" title="多线程创建"></a>多线程创建</h5><ul>
+<li><p>2.2.1 继承Thread类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class Demo1  extends Thread&#123;	</span><br><span class="line">public void run() &#123;&#125; //重写run方法</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">	Demo1  d = new Demo1();</span><br><span class="line">	d.start();//调用start（）才算启动线程</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>2.2.2 实现Runnable接口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class Demo1 implements Runnable&#123;</span><br><span class="line">	public void run()&#123;&#125; //实现run方法</span><br><span class="line">&#125;</span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">	Demo1  d = new Demo1();</span><br><span class="line">	Thread t = new Thread(d);//还是要传给Thread类来实现线程的</span><br><span class="line">	t.start();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>2.2.3 实现Callable接口</p>
+<blockquote>
+<ul>
+<li>Callable接口：无返回值的任务必须实现Runnable接口，run方法不能处理异常，有返回值的任务必须实现Callable接口，call方法可以处理异常。</li>
+<li>Future：用来 获取Callable任务后结果， 执行Callable任务后，可以获取一个Future的对象，在该对象上调用get就可以获取到Callable任务返回的Object</li>
+<li>ExecutorService接口：通过Executors类获取线程池接口ExecutorService就可以实现有返回结果的多线程了。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Demo1 implements Callable&lt;Object&gt; &#123;  </span><br><span class="line">	@Override</span><br><span class="line">	public Object call()&#123;</span><br><span class="line">		return 你要返回的东西；</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">public static void main(String[] args)&#123;</span><br><span class="line">	Demo1 td = new Demo1();</span><br><span class="line">	//1.执行 Callable 方式，需要 Future的实现类的支持，用于接收运算结果。</span><br><span class="line">      	FutureTask&lt;Integer&gt; result = new FutureTask&lt;&gt;(td);</span><br><span class="line">	//还是一样要用Thread类来启动线程</span><br><span class="line">	new Thread(result).start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h5 id="线程安全问题"><a href="#线程安全问题" class="headerlink" title="线程安全问题"></a>线程安全问题</h5><ul>
+<li>2.3.1 synchronized同步锁<blockquote>
+<ul>
+<li>可以声明代码块或者直接修饰方法</li>
+<li>声明在方法中就是默认指定了当前对象为锁</li>
+<li>声明代码块可以自己指定锁 </li>
+</ul>
+</blockquote>
+</li>
+<li>2.3.1 ReentrantLock重入锁（了解就行）<blockquote>
+<ul>
+<li>可以设置等待限时</li>
+<li>可以设置公平锁<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class MyThread extends Thread &#123;</span><br><span class="line">	//在构造方法中加上true就表示设置了公平锁</span><br><span class="line">    private ReentrantLock mLock = new ReentrantLock(true);</span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">		//设置等待时间，在规定时间内获取到就返回turn，过了就返回false</span><br><span class="line">		if (mLock.tryLock(2, TimeUnit.SECONDS)) &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    Thread.sleep(5000);</span><br><span class="line">                &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h5 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h5><ul>
+<li>2.4.1 sleep()方法<blockquote>
+<ul>
+<li>在指定时间内让当前正在执行的线程暂停执行,不会释放锁资源，会导致线程阻塞 </li>
+</ul>
+</blockquote>
+</li>
+<li>2.4.2 wait()方法<blockquote>
+<ul>
+<li>会使当前线程进入休眠状态，释放锁资源，只有当被notify或notifyAll唤醒时才进入等待状态，等待cup分配资源给他运行</li>
+<li>notify是唤醒同把锁下的第一个被wait（）进入休眠状态的线程，notifyAll是唤醒同一把锁下的所有线程</li>
+</ul>
+</blockquote>
+</li>
+<li>2.4.3 yield（）方法<blockquote>
+<ul>
+<li>暂停当前正在执行的线程对象。</li>
+<li>yield()只是使当前线程重新回到可执行状态，所以执行yield()的线程有可能在进入到可执行状态后马上又被执行。</li>
+<li>yield只能使当前线程重新回到可执行状态，不会释放锁资源。</li>
+</ul>
+</blockquote>
+</li>
+<li>2.4.4 join()方法<blockquote>
+<ul>
+<li>等待调用join方法的线程结束，再继续执行。</li>
+<li>join方法底层调用的是Object的wait（）所有会释放锁资源。</li>
+</ul>
+</blockquote>
+</li>
+<li>2.4.5 后台线程<blockquote>
+<ul>
+<li>启动线程之前（调用start方法之前）调用setDaemon（true）方法，就可以把该线程设置为后台线程（守护线程）。</li>
+<li>后台线程只有在前台线程全部执行完后就会自动结束。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h4 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h4><h5 id="获取类的字节码"><a href="#获取类的字节码" class="headerlink" title="获取类的字节码"></a>获取类的字节码</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1.Class clazz1 = Class.forName(&quot;包名.类名&quot;)</span><br><span class="line">2.Class clazz2 =类名.class;</span><br><span class="line">3.	Goods p1 = new Goods();</span><br><span class="line">	Class clazz3 = p1.getClass();</span><br></pre></td></tr></table></figure>
+
+<h5 id="获取类中一些信息"><a href="#获取类中一些信息" class="headerlink" title="获取类中一些信息"></a>获取类中一些信息</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">1.getName()：类的名称（全名，全限定名）</span><br><span class="line">2.getSimpleName()：类的的简单名称（不带包名）</span><br><span class="line">3.getModifiers()：类的的修饰符(public:1,不写的：0)</span><br><span class="line">4.newInstance()可以直接获取到无参的构造方法</span><br><span class="line">Object ins = clazz1.newInstance();</span><br><span class="line"></span><br><span class="line">5.获取有参构造方法（重点）</span><br><span class="line">Constructor&lt;?&gt; con = clazz1.getConstructor(Integer.class, String.class);</span><br><span class="line">//传入的值是上面设置的类型，上面设置的值要和构造方法一致</span><br><span class="line">Object o = con.newInstance(2,&quot;小白&quot;)</span><br></pre></td></tr></table></figure>
+
+<h5 id="获取类中的方法"><a href="#获取类中的方法" class="headerlink" title="获取类中的方法"></a>获取类中的方法</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">// 1.获取非私用方法(包括父类继承的方法)</span><br><span class="line">Class clazz2 =类名.class;</span><br><span class="line">Method[] methods = clazz1.getMethods();</span><br><span class="line">System.out.println(methods.length);</span><br><span class="line">	for (Method m : methods) &#123;</span><br><span class="line">		if (&quot;setGoodsId&quot;.equals(m.getName())) &#123;</span><br><span class="line">			//invoke是调用方法，第一个参数是对象，第二个开始后面的都是方法中要传的值</span><br><span class="line">			//相当于调用clazz1.newInstance()对象的setGoodsId，实参为1</span><br><span class="line">			m.invoke(clazz1.newInstance(), 1);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">// 2.获取指定名称的函数</span><br><span class="line">Method method1 = clazz1.getMethod(&quot;getGoodsName&quot;, null);</span><br><span class="line">//当反射静态方法时第一个参数不用写（就是写null）</span><br><span class="line">method1.invoke(new Goods(), null);</span><br><span class="line"></span><br><span class="line">// 3.获取所有方法包括私有方法（但不会获取到父类的方法）</span><br><span class="line">Method[] methods = getDeclaredMethods()</span><br><span class="line"></span><br><span class="line">// 4.获取私有访求（需要设置暴力访问才能用） </span><br><span class="line">Method method = clazz1.getDeclaredMethod(&quot;setStatus&quot;, String.class);</span><br><span class="line">method.setAccessible(true);//设置可暴力访问</span><br><span class="line">method.invoke(clazz1.newInstance(), &quot;上架&quot;);</span><br></pre></td></tr></table></figure>
+
+<h5 id="获取类中的属性"><a href="#获取类中的属性" class="headerlink" title="获取类中的属性"></a>获取类中的属性</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">1.获取公共字段</span><br><span class="line">	Field[] fields = clazz1.getFields();</span><br><span class="line">	Goods p = new Goods();</span><br><span class="line">      	System.out.println(fields.length);</span><br><span class="line">	for (Field f : fields) &#123;</span><br><span class="line">		System.out.println(f.getName());</span><br><span class="line">		System.out.println(f.getType().getName());</span><br><span class="line">		if (&quot;goodsName&quot;.equals(f.getName())) &#123;	</span><br><span class="line">			//给属性赋值			</span><br><span class="line">			f.set(p, &quot;面包&quot;);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">2.获取指定参数的公共字段</span><br><span class="line">	Field getField(String name)  </span><br><span class="line">3.获取所有的字段，包括私用</span><br><span class="line">	Field[] getDeclaredFields()  </span><br><span class="line">4.获取指定参数的字段,包括私有</span><br><span class="line">	Field field = clazz1.getDeclaredField(&quot;goodsId&quot;);</span><br><span class="line">		//设置暴力访问</span><br><span class="line">		field.setAccessible(true);</span><br><span class="line">		//利用newInstance()创建对象</span><br><span class="line">		Goods p = (Goods)clazz1.newInstance();</span><br><span class="line">		field.set(p, 100);</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/24/JavaSE 查漏补缺2/" rel="next" title="JavaSE 查漏补缺（二）">
+                <i class="fa fa-chevron-left"></i> JavaSE 查漏补缺（二）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/touxiang.jpg" alt="OneKing">
+            
+              <p class="site-author-name" itemprop="name">OneKing</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#IO流"><span class="nav-number">1.</span> <span class="nav-text">IO流</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#File类"><span class="nav-number">1.1.</span> <span class="nav-text">File类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#字节流"><span class="nav-number">1.2.</span> <span class="nav-text">字节流</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#缓冲流"><span class="nav-number">1.3.</span> <span class="nav-text">缓冲流</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#字符流"><span class="nav-number">1.4.</span> <span class="nav-text">字符流</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#序列流"><span class="nav-number">1.5.</span> <span class="nav-text">序列流</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程"><span class="nav-number">2.</span> <span class="nav-text">线程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#进程和线程"><span class="nav-number">2.1.</span> <span class="nav-text">进程和线程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#多线程创建"><span class="nav-number">2.2.</span> <span class="nav-text">多线程创建</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#线程安全问题"><span class="nav-number">2.3.</span> <span class="nav-text">线程安全问题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#关键字"><span class="nav-number">2.4.</span> <span class="nav-text">关键字</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#反射"><span class="nav-number">3.</span> <span class="nav-text">反射</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#获取类的字节码"><span class="nav-number">3.1.</span> <span class="nav-text">获取类的字节码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#获取类中一些信息"><span class="nav-number">3.2.</span> <span class="nav-text">获取类中一些信息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#获取类中的方法"><span class="nav-number">3.3.</span> <span class="nav-text">获取类中的方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#获取类中的属性"><span class="nav-number">3.4.</span> <span class="nav-text">获取类中的属性</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">OneKing</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共6.5k字</span>
+</div>
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/click.js"></script>
+</body>
+</html>
