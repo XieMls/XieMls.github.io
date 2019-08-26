@@ -1828,7 +1828,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #8affff;
+  background: #332faf;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2997,7 +2997,7 @@ pre .javascript .function {
   }
 }
 body {
-  background: url("/images/bg1.jpg");
+  background: url("/images/bg4.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -3008,7 +3008,7 @@ body {
 }
 .main-inner {
   background: #fff;
-  opacity: 0.95;
+  opacity: 0.8;
 }
 @font-face {
   font-family: Zitiming;
