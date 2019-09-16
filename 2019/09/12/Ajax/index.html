@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="JS原生AjaxXMLHttprequest对象XMLHttprequest中的方法 1.open方法（用于与服务器连接）   12345open（参数1，参数2，参数3）；//第一个参数：请求方式GET/POST//第二个参数：后台服务器地址//第三个参数：是否是异步 true--异步   false--同步xmlHttp.open(&amp;quot;GET&amp;quot;, &amp;quot;$&amp;#123;p">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ajax">
+<meta property="og:url" content="http://yoursite.com/2019/09/12/Ajax/index.html">
+<meta property="og:site_name" content="OneKing">
+<meta property="og:description" content="JS原生AjaxXMLHttprequest对象XMLHttprequest中的方法 1.open方法（用于与服务器连接）   12345open（参数1，参数2，参数3）；//第一个参数：请求方式GET/POST//第二个参数：后台服务器地址//第三个参数：是否是异步 true--异步   false--同步xmlHttp.open(&amp;quot;GET&amp;quot;, &amp;quot;$&amp;#123;p">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-09-16T07:09:55.269Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ajax">
+<meta name="twitter:description" content="JS原生AjaxXMLHttprequest对象XMLHttprequest中的方法 1.open方法（用于与服务器连接）   12345open（参数1，参数2，参数3）；//第一个参数：请求方式GET/POST//第二个参数：后台服务器地址//第三个参数：是否是异步 true--异步   false--同步xmlHttp.open(&amp;quot;GET&amp;quot;, &amp;quot;$&amp;#123;p">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/09/12/Ajax/">
+
+
+
+
+
+  <title>Ajax | OneKing</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">OneKing</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">进阶之路</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home  //首页"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags  //标签"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th   //分类"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/12/Ajax/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="OneKing">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/touxiang.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OneKing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Ajax</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-12T16:30:04+08:00">
+                2019-09-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="JS原生Ajax"><a href="#JS原生Ajax" class="headerlink" title="JS原生Ajax"></a>JS原生Ajax</h3><h4 id="XMLHttprequest对象"><a href="#XMLHttprequest对象" class="headerlink" title="XMLHttprequest对象"></a>XMLHttprequest对象</h4><h5 id="XMLHttprequest中的方法"><a href="#XMLHttprequest中的方法" class="headerlink" title="XMLHttprequest中的方法"></a>XMLHttprequest中的方法</h5><ul>
+<li><p>1.open方法（用于与服务器连接）</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">open（参数1，参数2，参数3）；</span><br><span class="line">//第一个参数：请求方式GET/POST</span><br><span class="line">//第二个参数：后台服务器地址</span><br><span class="line">//第三个参数：是否是异步 true--异步   false--同步</span><br><span class="line">xmlHttp.open(&quot;GET&quot;, &quot;$&#123;pageContext.request.contextPath&#125;/ajaxServlet?username=zhangsan&quot;,true);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>2.send方法（用于传递数据给数据库）</p>
+<blockquote>
+<ul>
+<li>get请求时：send（）；</li>
+<li>post请求时：send（数据）；</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>3.setRequestHeader方法（设置请求头信息）<blockquote>
+<ul>
+<li>get请求时：不需要写此方法</li>
+<li>post请求时：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">当表单有文件上传时：</span><br><span class="line">setRequestHeader(&quot;Content-type&quot;,&quot; multipart/form-data&quot;);</span><br><span class="line">当表单没有文件上传时：</span><br><span class="line">setRequestHeader(&quot;Content-type&quot;,&quot;application/x-www-form-urlencoded&quot;);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h5 id="XMLHttprequest中的属性"><a href="#XMLHttprequest中的属性" class="headerlink" title="XMLHttprequest中的属性"></a>XMLHttprequest中的属性</h5><ul>
+<li>1.readyState（请求状态）<table>
+<thead>
+<tr>
+<th align="left">状态</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="center">请求未初始化</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="center">服务器连接已建立</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="center">请求已接收 接收到了响应头</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="center">请求处理中 正在下载响应体</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="center">请求已完成，且响应已就绪</td>
+</tr>
+</tbody></table>
+</li>
+<li>2.status（响应状态）<table>
+<thead>
+<tr>
+<th align="left">状态</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1xx</td>
+<td align="center">响应中——表示请求已经接受，继续处理</td>
+</tr>
+<tr>
+<td align="left">2xx</td>
+<td align="center">成功——表示请求已经被成功接收、理解、接受</td>
+</tr>
+<tr>
+<td align="left">3xx</td>
+<td align="center">重定向——要完成请求必须进行更进一步的操作</td>
+</tr>
+<tr>
+<td align="left">4xx</td>
+<td align="center">客户端错误——请求有语法错误或请求无法实现</td>
+</tr>
+<tr>
+<td align="left">5xx</td>
+<td align="center">服务器端错误——服务器未能实现合法的请求</td>
+</tr>
+</tbody></table>
+</li>
+<li>3.onreadystatechange（回调函数）</li>
+<li>4.responseText、responseXML（响应格式String和xml格式）<h5 id="例子："><a href="#例子：" class="headerlink" title="例子："></a>例子：</h5></li>
+<li>POST:  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function f1()&#123;</span><br><span class="line">       //1.创建ajax对象</span><br><span class="line">       var xmlHttp = new XMLHttpRequest();</span><br><span class="line">       //2.回调函数，就是当第5步执行完后就会用着个函数接收服务器返回的数据</span><br><span class="line">（这里写的是匿名函数）</span><br><span class="line">       xmlHttp.onreadystatechange = function()&#123;</span><br><span class="line">           //判断数据是否正常返回</span><br><span class="line">           if(xmlHttp.readyState==4&amp;&amp;xmlHttp.status==200)&#123;</span><br><span class="line">               //6.接收数据</span><br><span class="line">               var res = xmlHttp.responseText;</span><br><span class="line">               document.getElementById(&quot;span1&quot;).innerHTML = res;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       //3.绑定处理请求的地址,true为异步，false为同步</span><br><span class="line">       //GET方式提交把参数加在地址后面?key1:value&amp;key2:value</span><br><span class="line">       xmlHttp.open(&quot;POST&quot;,&quot;/ajax/ajax1&quot;,true);</span><br><span class="line">       //4.POST提交设置的协议头（GET方式省略）</span><br><span class="line">       xmlHttp.setRequestHeader(&quot;Content-type&quot;,&quot;application/x-www-form-urlencoded&quot;);</span><br><span class="line">       //POST提交将参数，如果是GET提交send不用提交参数</span><br><span class="line">       //5.发送请求</span><br><span class="line">       xmlHttp.send(&quot;name=zjj&amp;age=18&quot;);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>GET：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function fn1() &#123;</span><br><span class="line">var xmlHttp = new XMLHttpRequest();</span><br><span class="line">    	xmlHttp.onreadystatechange = function() &#123;</span><br><span class="line">    		//当状态变化时处理的事情</span><br><span class="line">	if (xmlHttp.readyState == 4 &amp;&amp; xmlHttp.status == 200) &#123;</span><br><span class="line">		//接收响应信息</span><br><span class="line">		var data = xmlHttp.responseText;</span><br><span class="line">              document.getElementById(&quot;span1&quot;).innerHTML=data;</span><br><span class="line">            &#125;</span><br><span class="line">     &#125;</span><br><span class="line">//get是在open中传入参数的，不用写请求头信息（setRequestHeader）</span><br><span class="line">    xmlHttp.open(&quot;GET&quot;, &quot;$&#123;pageContext.request.contextPath&#125;/ajaxServlet?username=zhangsan&quot;,true);         </span><br><span class="line">    xmlHttp.send();</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="JQuery中的Ajax"><a href="#JQuery中的Ajax" class="headerlink" title="JQuery中的Ajax"></a>JQuery中的Ajax</h3><h4 id="异步和同步说明"><a href="#异步和同步说明" class="headerlink" title="异步和同步说明"></a>异步和同步说明</h4><ul>
+<li><p>通俗而讲：</p>
+<blockquote>
+<ul>
+<li>同步就是我强依赖你(对方)，我必须等到你的回复，才能做出下一步响应。即我的操作(行程)是顺序执行的，中间少了哪一步都不可以，或者说中间哪一步出错都不可以，类似于编程中程序被解释器顺序执行一样；同时如果我没有收到你的回复，我就一直处于等待、也就是阻塞的状态。 异步则相反，我并不强依赖你，我对你响应的时间也不敏感，无论你返回还是不返回，我都能继续运行；你响应并返回了，我就继续做之前的事情，你没有响应，我就做其他的事情。也就是说我不存在等待对方的概念，我就是非阻塞的。</li>
+</ul>
+</blockquote>
+<h4 id="配置信息"><a href="#配置信息" class="headerlink" title="配置信息"></a>配置信息</h4></li>
+<li><p>配置信息大全</p>
+<blockquote>
+<ul>
+<li>$.ajax({<br><strong>async: true,</strong>//是否异步（默认是true）<br><strong>cache: true,</strong>//dataType 为 script 和 jsonp 时默认为 false。设置为 false 将不缓存此页面。<br><strong>timeout: 1000,</strong>//超时时间，单位毫秒<br><strong>url: “<a href="http://www.baidu.com&quot;" target="_blank" rel="noopener">www.baidu.com&quot;</a>,</strong>//请求地址<br><strong>type:”post”,</strong>//请求类型<br><strong>contentType: “application/x-www-form-urlencoded”,</strong>//当发送信息至服务器时，内容编码类型<br><strong>dataType: “json”,</strong>//预期服务器返回的数据类型<br><strong>data: “id=1”,</strong>//要求为Object或String类型的参数，发送到服务器的数据<br><strong>context: null,</strong>//设置 Ajax 相关回调函数的上下文。让回调函数内 this 指向这个对象（如果不设定这个参数，那么 this 就指向调用本次 AJAX 请求时传递的 options 参数）。比如指定一个 DOM 元素作为 context 参数，这样就设置了 success 回调函数的上下文为这个 DOM 元素。<br><strong>jsonp: null,</strong>//在一个 jsonp 请求中重写回调函数的名字<br><strong>jsonpCallback: null,</strong>//为 jsonp 请求指定一个回调函数名。<br><strong>password: null,</strong>//用于响应 HTTP 访问认证请求的密码<br><strong>username: null,</strong>//用于响应 HTTP 访问认证请求的用户名。<br><strong>processData: true,</strong>//默认情况下，通过data选项传递进来的数据，如果是一个对象(技术上讲只要不是字符串)，都会处理转化成一个查询字符串，以配合默认内容类型   “application/x-www-form-urlencoded”。如果要发送 DOM 树信息或其它不希望转换的信息，请设置为 false。<br><strong>scriptCharset: null,</strong>//只有当请求时 dataType 为 “jsonp” 或 “script”，并且 type 是 “GET” 才会用于强制修改 charset。通常只在本地和远程的内容编码不同时使用。<br><strong>traditional: false,</strong>//如果你想要用传统的方式来序列化数据，那么就设置为 true。<br><strong>xhr: function (XMLHttpRequest) { this; },</strong>//需要返回一个 XMLHttpRequest 对象。用于重写或者提供一个增强的 XMLHttpRequest 对象。<br><strong>ifModified: false,</strong>//仅在服务器数据改变时获取新数据。<br><strong>global: true,</strong>//设置为 false 将不会触发全局 AJAX 事件，如 ajaxStart 或 ajaxStop 可用于控制不同的 Ajax 事件。<br><strong>beforeSend: function (XMLHttpRequest) { this; },</strong>//发送请求前可以修改XMLHttpRequest对象的函数,true请求,false不请求<br><strong>dataFilter: function (data, type) { return data },</strong>//给Ajax返回的原始数据进行预处理的函数。提供data和type两个参数。data是Ajax返回的原始数据，type是调用jQuery.ajax时提供的dataType参数。函数返回的值将由jQuery进一步处理。<br><strong>success: function (data, textStatus) { this; },</strong>//请求成功后调用的回调函数<br><strong>complete: function (XMLHttpRequest, textStatus) { this; },</strong>//请求完成后回调函数 (请求成功或失败之后均调用)。<br><strong>error: function (XMLHttpRequest, textStatus, errorThrown) { this }</strong>//请求失败时被调用的函数</li>
+</ul>
+</blockquote>
+<h4 id="常用的几种Ajax"><a href="#常用的几种Ajax" class="headerlink" title="常用的几种Ajax"></a>常用的几种Ajax</h4></li>
+<li><p>1.$.ajax():</p>
+<blockquote>
+<ul>
+<li>(也可以写成jQuery.ajax)：这个是比较原始的，可用get、post数据<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">function fn1() &#123;</span><br><span class="line">	$.ajax(&#123;</span><br><span class="line">    		async: true,//是否异步(默认true)</span><br><span class="line">    		timeout: 1000,//超时时间，单位毫秒</span><br><span class="line">    		url: &quot;www.baidu.com&quot;,//请求地址</span><br><span class="line">    		type:&quot;post&quot;,//请求类型</span><br><span class="line">			//当发送信息至服务器时，内容编码类型</span><br><span class="line">    		contentType: &quot;application/x-www-form-urlencoded&quot;,	</span><br><span class="line">    		dataType: &quot;json&quot;,//预期服务器返回的数据类型</span><br><span class="line">    		data: &quot;id=1&quot;,//要求为Object或String类型的参数，发送到服务器的数据</span><br><span class="line">    		success: function (data) &#123;</span><br><span class="line">        			if (data.Result == true) alert(&quot;返回成功：&quot; + data.Msg);</span><br><span class="line">        			else alert(&quot;返回失败：&quot; + data.Msg);</span><br><span class="line">   		 &#125;,//请求成功后调用的回调函数</span><br><span class="line">    		error: function (XMLHttpRequest, textStatus, errorThrown) &#123;</span><br><span class="line">       			console.log(&quot;状态：&quot; + XMLHttpRequest.status);</span><br><span class="line">        			console.log(&quot;错误：&quot; + textStatus);</span><br><span class="line">    		&#125;//请求失败时被调用的函数</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+</li>
+<li><p>2.$.get()方法：</p>
+<blockquote>
+<ul>
+<li>和$.ajax区别：这个不用再方法内中写{ },不用写key，直接写value，顺序不能变。<br>语法：jQuery.get( url [, data ] [, success ] [, dataType ] )<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function fn1() &#123;</span><br><span class="line">	$.get(	&apos;/user.json&apos;,	//地址</span><br><span class="line">		&apos;id=1&apos;, 	//传给服务器的数据</span><br><span class="line">		function (data, status, jsXHR) &#123;  </span><br><span class="line">			//成功时回调函数，没有error和其他的回调函数</span><br><span class="line">			console.log(data.id);</span><br><span class="line">		&#125;,</span><br><span class="line">      		&apos;json&apos;	//服务器返回的数据类型，可以不写</span><br><span class="line">	);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<ul>
+<li>3.$.post()方法:(和$.get()方法一致，只是开头用$.post())</li>
+<li>4.load()方法：<blockquote>
+<ul>
+<li>从后台输出html内容，输出完成后替换到选择元素的内部。<br>语法：$(选择器).load( url [, data ] [, 成功的回调函数] )<br>作用：可以通过服务器写将想要输出的html内容直接输出到选中的元素中</li>
+</ul>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">function fn1() &#123;</span><br><span class="line">	$(#id).load(	&apos;/user.json&apos;,	//地址</span><br><span class="line">			&apos;id=1&apos;, 		//传给服务器的数据</span><br><span class="line">						//一般回调函数不写</span><br><span class="line">	);				</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>5.$.getJSON():</p>
+<blockquote>
+<ul>
+<li>语法： jQuery.getJSON( url [, data ] [, success ] )<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function fn1() &#123;</span><br><span class="line">	$getJSON(	&apos;/user.json&apos;,	//地址</span><br><span class="line">			&#123;name:”zhangshan”,age:”18”&#125;, //传给服务器的数据,json数据</span><br><span class="line">			function(json)&#123;	//返回的是一个json数据</span><br><span class="line">				//这里是获取返回的json数组中的下标为2的name的value</span><br><span class="line">				alert(json.user[2].name)	</span><br><span class="line">			&#125;</span><br><span class="line">	);				</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/30/JavaSE 查漏补缺3/" rel="next" title="JavaSE 查漏补缺（三）">
+                <i class="fa fa-chevron-left"></i> JavaSE 查漏补缺（三）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/touxiang.jpg" alt="OneKing">
+            
+              <p class="site-author-name" itemprop="name">OneKing</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#JS原生Ajax"><span class="nav-number">1.</span> <span class="nav-text">JS原生Ajax</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#XMLHttprequest对象"><span class="nav-number">1.1.</span> <span class="nav-text">XMLHttprequest对象</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#XMLHttprequest中的方法"><span class="nav-number">1.1.1.</span> <span class="nav-text">XMLHttprequest中的方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#XMLHttprequest中的属性"><span class="nav-number">1.1.2.</span> <span class="nav-text">XMLHttprequest中的属性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#例子："><span class="nav-number">1.1.3.</span> <span class="nav-text">例子：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JQuery中的Ajax"><span class="nav-number">2.</span> <span class="nav-text">JQuery中的Ajax</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#异步和同步说明"><span class="nav-number">2.1.</span> <span class="nav-text">异步和同步说明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置信息"><span class="nav-number">2.2.</span> <span class="nav-text">配置信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常用的几种Ajax"><span class="nav-number">2.3.</span> <span class="nav-text">常用的几种Ajax</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">OneKing</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共8.9k字</span>
+</div>
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/click.js"></script>
+</body>
+</html>
