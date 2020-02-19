@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="OneKing">
 <meta property="og:description" content="基本数据类型 1.1 Float和long比较由于存储结构不同，float比long表示的范围大。 1.2 基本数据类型在计算的时候， 数值常量默认是int，小数常量默认是double。  byte, short , int, char, 四种类型只要是发生计算都会自动的把结果提升成int类型 int long float, double 不同的类型来计算的时候没有类型的会向大的表数范围提升 整数">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-22T09:23:51.178Z">
+<meta property="og:updated_time" content="2019-09-20T07:42:00.229Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JavaSE 查漏补缺(一)">
 <meta name="twitter:description" content="基本数据类型 1.1 Float和long比较由于存储结构不同，float比long表示的范围大。 1.2 基本数据类型在计算的时候， 数值常量默认是int，小数常量默认是double。  byte, short , int, char, 四种类型只要是发生计算都会自动的把结果提升成int类型 int long float, double 不同的类型来计算的时候没有类型的会向大的表数范围提升 整数">
@@ -441,7 +441,7 @@
 <li>如果子类对父类的方法有覆写，并且子类的实例赋值给父类的引用，通过这个引用（jt）来调用这个覆写的方法的时候，调用的是子类。 </li>
 <li>当字类转换成父类的时候，引用将不在能调用子类的属性。</li>
 <li>如果父子类有同名的属性，那么父类指向子类的实例的引用调用这个属性的时候调用的还是父类的，不要和方法混淆。</li>
-<li>当父类转回子类的时候，这时调用的方法和属性都是子类的（子类没有就找父类的）<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Class Teache&#123;&#125;</span><br><span class="line">Class Teache extends JavaTeacher&#123;&#125;</span><br><span class="line">//子类自动转换成父类(向上转型)</span><br><span class="line">Teacher jt = new JavaTeacher();</span><br><span class="line"></span><br><span class="line">//父类转换成子类（前提是父类的真身是这个子类，向下转型）</span><br><span class="line">Teacher jt = new JavaTeacher();</span><br><span class="line">JavaTeacher t = (JavaTeacher)jt;</span><br></pre></td></tr></table></figure>
+<li>当父类转回子类的时候，这时调用的方法和属性都是子类的（子类没有就找父类的）<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Class Teache&#123;&#125;</span><br><span class="line">Class JavaTeacher extends Teache&#123;&#125;</span><br><span class="line">//子类自动转换成父类(向上转型)</span><br><span class="line">Teacher jt = new JavaTeacher();</span><br><span class="line"></span><br><span class="line">//父类转换成子类（前提是父类的真身是这个子类，向下转型）</span><br><span class="line">Teacher jt = new JavaTeacher();</span><br><span class="line">JavaTeacher t = (JavaTeacher)jt;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 </blockquote>
@@ -571,7 +571,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -635,7 +635,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -653,7 +653,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共8.9k字</span>
+  <span class="post-count">博客全站共11.9k字</span>
 </div>
         
 

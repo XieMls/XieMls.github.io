@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="redis一般应用场景 缓存会话（单点登录） 分布式锁，比如：使用setnx 各种排行榜或计数器 商品列表或用户基础数据列表等 使用list作为消息对列 秒杀，库存扣减等  为什么使用redis？主要是从两个角度去考虑:性能和并发。 性能：我们在碰到需要执行耗时特别久，且结果不频繁变动的SQL，就特别适合将运行结果放入缓存。这样，后面的请求就去缓存中读取，使得请求能够迅速响应。 并发：在大并发的情">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis">
+<meta property="og:url" content="http://yoursite.com/2020/02/18/Redis/index.html">
+<meta property="og:site_name" content="OneKing">
+<meta property="og:description" content="redis一般应用场景 缓存会话（单点登录） 分布式锁，比如：使用setnx 各种排行榜或计数器 商品列表或用户基础数据列表等 使用list作为消息对列 秒杀，库存扣减等  为什么使用redis？主要是从两个角度去考虑:性能和并发。 性能：我们在碰到需要执行耗时特别久，且结果不频繁变动的SQL，就特别适合将运行结果放入缓存。这样，后面的请求就去缓存中读取，使得请求能够迅速响应。 并发：在大并发的情">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-02-19T06:37:37.464Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis">
+<meta name="twitter:description" content="redis一般应用场景 缓存会话（单点登录） 分布式锁，比如：使用setnx 各种排行榜或计数器 商品列表或用户基础数据列表等 使用list作为消息对列 秒杀，库存扣减等  为什么使用redis？主要是从两个角度去考虑:性能和并发。 性能：我们在碰到需要执行耗时特别久，且结果不频繁变动的SQL，就特别适合将运行结果放入缓存。这样，后面的请求就去缓存中读取，使得请求能够迅速响应。 并发：在大并发的情">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/02/18/Redis/">
+
+
+
+
+
+  <title>Redis | OneKing</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">OneKing</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">进阶之路</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home  //首页"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags  //标签"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th   //分类"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/18/Redis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="OneKing">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/touxiang.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OneKing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Redis</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-18T20:53:19+08:00">
+                2020-02-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="redis一般应用场景"><a href="#redis一般应用场景" class="headerlink" title="redis一般应用场景"></a>redis一般应用场景</h3><ul>
+<li>缓存会话（单点登录）</li>
+<li>分布式锁，比如：使用setnx</li>
+<li>各种排行榜或计数器</li>
+<li>商品列表或用户基础数据列表等</li>
+<li>使用list作为消息对列</li>
+<li>秒杀，库存扣减等</li>
+</ul>
+<h3 id="为什么使用redis？"><a href="#为什么使用redis？" class="headerlink" title="为什么使用redis？"></a>为什么使用redis？</h3><h4 id="主要是从两个角度去考虑-性能和并发。"><a href="#主要是从两个角度去考虑-性能和并发。" class="headerlink" title="主要是从两个角度去考虑:性能和并发。"></a>主要是从两个角度去考虑:性能和并发。</h4><ul>
+<li><strong>性能：</strong>我们在碰到需要执行耗时特别久，且结果<label style="color:red">不频繁变动的SQL</label>，就特别适合将运行结果放入缓存。这样，后面的请求就去缓存中读取，使得请求能够迅速响应。</li>
+<li><strong>并发：</strong>在大并发的情况下，所有的请求直接访问数据库，数据库会出现连接异常。这个时候，就需要<label style="color:red">使用redis做一个缓冲操作，</label>让请求先访问到redis，而不是直接访问数据库。</li>
+</ul>
+<h3 id="Redis的五种数据类型"><a href="#Redis的五种数据类型" class="headerlink" title="Redis的五种数据类型"></a>Redis的五种数据类型</h3><ul>
+<li><strong>String</strong><ul>
+<li>常规的set/get操作，value可以是String也可以是数字。一般做一些复杂的计数功能的缓存。</li>
+<li>它是redis的最基本的数据类型，一个键对应一个值，需要注意是一个键值最大存储512MB。 </li>
+</ul>
+</li>
+<li><strong>Hash</strong><ul>
+<li>存放键值对，<label style="color:red">适合用于存储对象</label>，一般可以用来存某个对象的基本属性信息，例如，用户信息，商品信息等，另外，由于hash的大小在小于配置的大小的时候使用的是ziplist结构，比较节约内存，所以针对大量的数据存储可以考虑使用hash来分段存储来达到压缩数据量，节约内存的目的，例如，对于大批量的商品对应的图片地址名称。</li>
+</ul>
+</li>
+<li><strong>List</strong><ul>
+<li>列表类型，可以用于实现消息队列，也可以使用它提供的range命令，做分页查询功能。</li>
+</ul>
+</li>
+<li><strong>Set</strong><ul>
+<li>集合，整数的有序列表可以直接使用set。可以用作某些去重功能，例如用户名不能重复等，另外，还可以对集合进行交集，并集操作，来查找某些元素的共同点</li>
+</ul>
+</li>
+<li><strong>Sorted set</strong><ul>
+<li>有序集合，sorted set多了一个权重参数score,集合中的元素能够按score进行排列。可以做排行榜应用，取TOP N操作。</li>
+</ul>
+</li>
+</ul>
+<h3 id="redis持久化的两种方式：RDB和AOF"><a href="#redis持久化的两种方式：RDB和AOF" class="headerlink" title="redis持久化的两种方式：RDB和AOF"></a>redis持久化的两种方式：RDB和AOF</h3><ul>
+<li><p><label style="color:blue"><strong>RDB持久化</strong></label>是在<label style="color:red">指定的时间间隔内将内存中的数据集快照写入磁盘</label>，实际操作过程是fork（叉）一个子进程，先将数据集写入临时文件，写入成功后，再替换之前的文件，用二进制压缩存储。    <br></p>
+</li>
+<li><p><em>优点：*</em>（1）文件备份只有一个文件，容易查找恢复；（2）灾难恢复效率高；<br></p>
+</li>
+<li><p><em>缺点：*</em>（1）如果在定时持久化前出现宕机，数据将丢失；（2）RDB是通过fork子进程来协助完成持久化，如果数据集较大会导致服务器短时间内停止服务</p>
+</li>
+<li><p><label style="color:blue"><strong>AOF持久化</strong></label>以日志的形式记录服务器所处理的每一个写、删除操作，查询操作不会记录，<label style="color:red">以文本的方式记录</label>，可以打开文件看到详细的操作记录。<br><br>优点：数据安全性更高，可以配置同步持久化。<br><br>缺点：灾难恢复效率低</p>
+</li>
+</ul>
+<h3 id="主从复制原理"><a href="#主从复制原理" class="headerlink" title="主从复制原理"></a>主从复制原理</h3><center>master（主服务器），slave（从服务器），sentinel（哨兵）</center> 
+
+<ul>
+<li>主从多个redis集合在一起，以<label style="color:red">一个master多个slave</label>为模式对外提供服务，<label style="color:red">配置master可读可写，配置slave提供读</label>，这样就即能保证redis集群中的数据同步，又可以实现redis的读写分离，如果写比较多的情况一般就以异步的形式提供服务。</li>
+</ul>
+<h4 id="全量同步和增量同步"><a href="#全量同步和增量同步" class="headerlink" title="全量同步和增量同步"></a><label style="color:red">全量同步和增量同步</label></h4><ul>
+<li><p><strong>全量同步：</strong>一般发生在slave初始化阶段，这时slave需要将master上的所有数据都复制一份</p>
+</li>
+<li><p><strong>增量同步：</strong>slave初始化后开始正常工作时主服务器发生的写操作同步到从服务器的过程，增量复制的过程主要是主服务器每执行一个写命令就会向从服务器发送相同的写命令，从服务器接收并执行收到的写命令</p>
+</li>
+</ul>
+<h4 id="哨兵机制"><a href="#哨兵机制" class="headerlink" title="哨兵机制"></a>哨兵机制</h4><p>哨兵是一个分布式系统，可以在一个架构中运行多个哨兵，该系统执行以下三个任务：</p>
+<ul>
+<li><p>监控：哨兵会不断地检查master和slave是否运行正常，只需配置主节点的监控即可，通过向主节点发送info，获取从节点的信息，并当有新的从节点加入时可以马上感知。<br><br><label style="color:blue">提醒：当被监控的redis出现问题时，哨兵通过API向管理员或其他程序发送通知</label></p>
+</li>
+<li><p>自动故障迁移：当一个master不能正常工作时，它会将失效master中的一个slave升级为新的master（这个master可以进行读写操作），并让失效master的其他slave改为复制新的master，当客户端试图连接到失效master时，集群也会向客户端返回新的master的地址，使得集群可以使用master代替失效的master，如果之前的主服务器恢复，会自动跟随新选举出来的master成为slave。</p>
+</li>
+</ul>
+<h4 id="redis的过期策略以及内存淘汰机制"><a href="#redis的过期策略以及内存淘汰机制" class="headerlink" title="redis的过期策略以及内存淘汰机制"></a>redis的过期策略以及内存淘汰机制</h4><p><label style="color:blue">分析:这个问题其实相当重要，到底redis有没用到家，这个问题就可以看出来。比如你redis只能存5G数据，可是你写了10G，那会删5G的数据。怎么删的，这个问题思考过么？还有，你的数据已经设置了过期时间，但是时间到了，内存占用率还是比较高，有思考过原因么?</label><br><br><label style="color:red"><strong>答：采用的是定期删除+惰性删除策略。</strong></label></p>
+<ul>
+<li><p>为什么不直接用定时删除策略?</p>
+<ul>
+<li>定时删除,<label style="color:red">用一个定时器来负责监视key,过期则自动删除。</label>虽然内存及时释放，但是十分消耗CPU资源。在大并发请求下，<label style="color:red">CPU要将时间应用在处理请求，而不是删除key</label>,因此没有采用这一策略.</li>
+</ul>
+</li>
+<li><p>定期删除+惰性删除是如何工作的呢?</p>
+<ul>
+<li>定期删除，redis默认每个100ms检查，是否有过期的key,有过期key则删除。需要说明的是，<label style="color:blue">redis不是每个100ms将所有的key检查一次，而是随机抽取进行检查</label>(如果每隔100ms,全部key进行检查，redis岂不是卡死)。因此，如果只采用定期删除策略，会导致很多key到时间没有删除。于是，<label style="color:red">惰性删除</label>派上用场。也就是说<label style="color:red">在你获取某个key的时候，redis会检查一下，这个key如果设置了过期时间那么是否过期了？</label>如果过期了此时就会删除。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>采用定期删除+惰性删除还会出现什么的问题？<ul>
+<li>如果<label style="color:red">定期删除没删除key</label>。然后<label style="color:red">你也没即时去请求key，也就是说惰性删除也没生效</label>。这样，redis的内存会越来越高。那么就<label style="color:red">应该采用内存淘汰机制</label>。<br>在redis.conf中有一行配置：maxmemory-policy volatile-lru <br>该配置就是配内存淘汰策略的</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><label style="color:red"><strong>淘汰策略</strong></label><ul>
+<li>no-eviction：当内存不足以容纳新写入数据时，<label style="color:red">新写入操作会报错</label>。应该没人用吧。</li>
+<li>allkeys-lru：当内存不足以容纳新写入数据时，在键空间中，<label style="color:red">移除最近最少使用的key</label>。推荐使用，目前项目在用这种。</li>
+<li>allkeys-random：当内存不足以容纳新写入数据时，<label style="color:red">在键空间中，随机移除某个key</label>。应该也没人用吧，你不删最少使用Key,去随机删。</li>
+<li>volatile-lru：当内存不足以容纳新写入数据时，<label style="color:red">在设置了过期时间的键空间中，移除最近最少使用的key</label>。这种情况一般是把redis既当缓存，又做持久化存储的时候才用。不推荐</li>
+<li>volatile-random：当内存不足以容纳新写入数据时，<label style="color:red">在设置了过期时间的键空间中，随机移除某个key</label>。依然不推荐</li>
+<li>volatile-ttl：当内存不足以容纳新写入数据时，<label style="color:red">在设置了过期时间的键空间中，有更早过期时间的key优先移除</label>。不推荐</li>
+</ul>
+</li>
+</ul>
+<h3 id="redis和数据库双写一致性问题"><a href="#redis和数据库双写一致性问题" class="headerlink" title="redis和数据库双写一致性问题"></a>redis和数据库双写一致性问题</h3><ul>
+<li><label style="color:red">先更新数据库，再删缓存，当有查询数据是再将数据放入缓存中</label>。其次，因为可能存在删除缓存失败的问题，提供一个补偿措施即可，例如利用消息队列。</li>
+</ul>
+<h3 id="缓存穿透、缓存击穿、缓存雪崩"><a href="#缓存穿透、缓存击穿、缓存雪崩" class="headerlink" title="缓存穿透、缓存击穿、缓存雪崩"></a><label style="color:red"><strong>缓存穿透、缓存击穿、缓存雪崩</strong></label></h3><ul>
+<li><p>缓存穿透</p>
+<ul>
+<li>是指<label style="color:red">查询一个不存在的key数据</label>，由于缓存没命中需要从数据库查询，查不到数据则不写入缓存，这将导致这个不存在的数据每次请求都要到数据库去查询，流量大时DB会挂掉，这也是经常提的缓存命中率问题（即黑客故意去请求缓存中不存在的数据，导致所有的请求都怼到数据库上，从而数据库连接异常。）<br>  <label style="color:red">常见的几种解决方案：</label><ol>
+<li>如果查询数据库也为空，直接<label style="color:red">设置一个默认值存放到缓存</label>，这样第二次到缓冲中获取就有值了，而不会继续访问数据库，这种办法最简单粗暴</li>
+<li>在控制层对要查询的<label style="color:red">key进行校验</label>，不符合则丢弃，然后再放行给后面的正常缓存处理逻辑</li>
+<li>不管数据库中是否有数据，都在缓存中<label style="color:red">保存对应的key，值为空就行</label>。–这样是为了避免数据库中没有这个数据，导致的平凡穿透缓存对数据库进行访问。空值如果太多，也会导致内存耗尽。导致不必要的内存消耗。这样就要定期的清理空值的key。避免内存被恶意占满。导致正常的功能不能缓存数据。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>缓存雪崩</p>
+<ul>
+<li>缓存雪崩是指在我们设置缓存时采用了<label style="color:red">相同的过期时间，导致缓存在某一时刻同时失效</label>，请求全部转发到DB，DB瞬时压力过重雪崩。（为什么设置过期时间：比如我们在发送手机验证码的时候，将手机号作为redis key，验证码作为redis value存储在redis中，并设置过期时间为60秒，如果60秒的时间到了，懂了没？）<br><label style="color:red">常见的几种解决方案：</label><ol>
+<li>给缓存的失效时间，加上一个随机值，避免集体失效。</li>
+<li>一般并发量不是特别多的时候，使用互斥锁，但是该方案吞吐量明显下降了。</li>
+<li>高并发下给每一个缓存数据增加相应的缓存标记，用来记录缓存的是否失效，如果缓存标记失效，则更新数据缓存</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>缓存击穿</p>
+<ul>
+<li>对于一些<label style="color:red">设置了过期时间的key</label>，如果这些key可能会在某些时间点被超高并发地访问，是一种非常“热点”的数据，这个时候，需要考虑一个问题：缓存被“击穿”的问题，这个和缓存雪崩的区别在于这里<label style="color:red">针对某一key缓存</label>，前者则是很多key。缓存在<label style="color:red">某个时间点过期的时候，恰好在这个时间点对这个Key有大量的并发请求过来</label>，这些请求发现缓存过期一般都会从后端DB加载数据并回设到缓存，这个时候大并发的请求可能会瞬间把后端DB压垮。<br><label style="color:red">常见的几种解决方案：</label><ol>
+<li>设置热点数据永远不过期。</li>
+<li>加互斥锁，业界比较常用的做法，是使用mutex。简单地来说，就是在缓存失效的时候（判断拿出来的值为空），不是立即去load db，而是先使用缓存工具的某些带成功操作返回值的操作（比如Redis的SETNX或者Memcache的ADD）去set一个mutex key，当操作返回成功时，再进行load db的操作并回设缓存；否则，就重试整个get缓存的方法。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/12/Ajax/" rel="next" title="Ajax">
+                <i class="fa fa-chevron-left"></i> Ajax
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/touxiang.jpg" alt="OneKing">
+            
+              <p class="site-author-name" itemprop="name">OneKing</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#redis一般应用场景"><span class="nav-number">1.</span> <span class="nav-text">redis一般应用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么使用redis？"><span class="nav-number">2.</span> <span class="nav-text">为什么使用redis？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#主要是从两个角度去考虑-性能和并发。"><span class="nav-number">2.1.</span> <span class="nav-text">主要是从两个角度去考虑:性能和并发。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis的五种数据类型"><span class="nav-number">3.</span> <span class="nav-text">Redis的五种数据类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis持久化的两种方式：RDB和AOF"><span class="nav-number">4.</span> <span class="nav-text">redis持久化的两种方式：RDB和AOF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主从复制原理"><span class="nav-number">5.</span> <span class="nav-text">主从复制原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#全量同步和增量同步"><span class="nav-number">5.1.</span> <span class="nav-text">全量同步和增量同步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#哨兵机制"><span class="nav-number">5.2.</span> <span class="nav-text">哨兵机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#redis的过期策略以及内存淘汰机制"><span class="nav-number">5.3.</span> <span class="nav-text">redis的过期策略以及内存淘汰机制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis和数据库双写一致性问题"><span class="nav-number">6.</span> <span class="nav-text">redis和数据库双写一致性问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存穿透、缓存击穿、缓存雪崩"><span class="nav-number">7.</span> <span class="nav-text">缓存穿透、缓存击穿、缓存雪崩</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">OneKing</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共11.9k字</span>
+</div>
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/click.js"></script>
+</body>
+</html>
